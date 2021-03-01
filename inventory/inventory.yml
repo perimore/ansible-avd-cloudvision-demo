@@ -4,12 +4,12 @@ all:
     CVP:
       hosts:
         cv_ztp:
-          ansible_host: 10.83.28.164
+          ansible_host: 10.83.31.64
           ansible_user: root
-          ansible_password: ansible
+          ansible_password: pfne
         cv_server:
-          ansible_httpapi_host: 10.83.28.164
-          ansible_host: 10.83.28.164
+          ansible_httpapi_host: 10.83.31.63
+          ansible_host: 10.83.31.63
           ansible_user: ansible
           ansible_password: ansible
           ansible_connection: httpapi
@@ -26,34 +26,48 @@ all:
           children:
             DC1_SPINES:
               hosts:
-                DC1-SPINE1:
-                  ansible_host: 10.255.0.11
-                DC1-SPINE2:
-                  ansible_host: 10.255.0.12
+                DC1-SPINE01:
+                  ansible_host: 10.73.3.1
+                DC1-SPINE02:
+                  ansible_host: 10.73.3.2
             DC1_L3LEAFS:
               children:
                 DC1_LEAF1:
                   hosts:
                     DC1-LEAF1A:
-                      ansible_host: 10.255.0.13
+                      ansible_host: 10.73.3.3
                     DC1-LEAF1B:
-                      ansible_host: 10.255.0.14
+                      ansible_host: 10.73.3.4
                 DC1_LEAF2:
                   hosts:
                     DC1-LEAF2A:
-                      ansible_host: 10.255.0.15
+                      ansible_host: 10.73.3.5
                     DC1-LEAF2B:
-                      ansible_host: 10.255.0.16
+                      ansible_host: 10.73.3.6
+                DC1_LEAF3:
+                  hosts:
+                    DC1-LEAF3A:
+                      ansible_host: 10.73.3.7
+                DC1_LEAF4:
+                  hosts:
+                    DC1-LEAF4A:
+                      ansible_host: 10.73.3.8
+                DC1_BLEAF1:
+                  hosts:
+                    DC1-BLEAF1A:
+                      ansible_host: 10.73.3.9
+                    DC1-BLEAF1B:
+                      ansible_host: 10.73.3.10
             DC1_L2LEAFS:
               children:
                 DC1_L2LEAF1:
                   hosts:
                     DC1-L2LEAF1A:
-                      ansible_host: 10.255.0.17
+                      ansible_host: 10.73.3.11
                 DC1_L2LEAF2:
                   hosts:
                     DC1-L2LEAF2A:
-                      ansible_host: 10.255.0.18
+                      ansible_host: 10.73.3.12
           vars:
             ansible_connection: httpapi
             ansible_network_os: eos
@@ -67,8 +81,9 @@ all:
         DC1_TENANTS_NETWORKS:
           children:
             DC1_L3LEAFS:
-            DC1_L2LEAFS:
+            DC1_L2LEAFS:            
         DC1_SERVERS:
           children:
             DC1_L3LEAFS:
             DC1_L2LEAFS:
+            

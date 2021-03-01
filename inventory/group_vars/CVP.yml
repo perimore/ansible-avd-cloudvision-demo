@@ -1,47 +1,55 @@
 ---
 ztp:
   default:
-    registration: 'http://10.255.0.1/ztp/bootstrap'
-    gateway: 10.255.0.3
+    registration: 'http://10.83.31.63/ztp/bootstrap'
+    gateway: 10.73.0.1
     nameservers:
-      - '10.255.0.3'
+      - '10.73.0.1'
   general:
     subnets:
-      - network: 10.255.0.0
-        netmask: 255.255.255.0
-        gateway: 10.255.0.3
+      - network: 10.73.0.0
+        netmask: 255.255.0.0
+        gateway: 10.73.0.1
         nameservers:
-          - '10.255.0.3'
-        start: 10.255.0.200
-        end: 10.255.0.250
+          - '10.73.0.1'
+        start: 10.73.3.101
+        end: 10.73.3.254
         lease_time: 300
   clients:
-  # GNS3 VM Request
-    - name: gns3
-      mac: '00:50:56:86:8b:2f'
-      ip4: 10.255.0.2
   # AVD/CVP Integration
-    - name: DC1-SPINE1
+    - name: DC1-SPINE01
       mac: '0c:1d:c0:1d:62:01'
-      ip4: 10.255.0.11
-    - name: DC1-SPINE2
+      ip4: 10.73.3.1
+    - name: DC1-SPINE02
       mac: '0c:1d:c0:1d:62:02'
-      ip4: 10.255.0.12
+      ip4: 10.73.3.2
     - name: DC1-LEAF1A
       mac: '0c:1d:c0:1d:62:11'
-      ip4: 10.255.0.13
+      ip4: 10.73.3.3
     - name: DC1-LEAF1B
       mac: '0c:1d:c0:1d:62:12'
-      ip4: 10.255.0.14
+      ip4: 10.73.3.4
     - name: DC1-LEAF2A
       mac: '0c:1d:c0:1d:62:21'
-      ip4: 10.255.0.15
+      ip4: 10.73.3.5
     - name: DC1-LEAF2B
       mac: '0c:1d:c0:1d:62:22'
-      ip4: 10.255.0.16
+      ip4: 10.73.3.6
+    - name: DC1-LEAF3A
+      mac: '0c:1d:c0:1d:62:31'
+      ip4: 10.73.3.7
+    - name: DC1-LEAF4A
+      mac: '0c:1d:c0:1d:62:51'
+      ip4: 10.73.3.8
+    - name: DC1-BLEAF1A
+      mac: '0c:1d:c0:1d:62:41'
+      ip4: 10.73.3.9
+    - name: DC1-BLEAF1B
+      mac: '0c:1d:c0:1d:62:42'
+      ip4: 10.73.3.10
     - name: DC1-L2LEAF1A
       mac: '0c:1d:c0:1d:62:13'
-      ip4: 10.255.0.17
+      ip4: 10.73.3.11
     - name: DC1-L2LEAF2A
       mac: '0c:1d:c0:1d:62:23'
-      ip4: 10.255.0.18
+      ip4: 10.73.3.12
