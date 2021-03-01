@@ -1,80 +1,127 @@
 # DC1-LEAF1B
 
+# Table of Contents
+
+- [Management](#management)
+  - [Management Interfaces](#management-interfaces)
+  - [DNS Domain](#dns-domain)
+  - [Name Servers](#name-servers)
+  - [Domain Lookup](#domain-lookup)
+  - [NTP](#ntp)
+  - [Management SSH](#management-ssh)
+  - [Management GNMI](#management-api-gnmi)
+  - [Management API](#Management-api-http)
+- [Authentication](#authentication)
+  - [Local Users](#local-users)
+  - [Enable Password](#enable-password)
+  - [TACACS Servers](#tacacs-servers)
+  - [IP TACACS Source Interfaces](#ip-tacacs-source-interfaces)
+  - [RADIUS Servers](#radius-servers)
+  - [AAA Server Groups](#aaa-server-groups)
+  - [AAA Authentication](#aaa-authentication)
+  - [AAA Authorization](#aaa-authorization)
+  - [AAA Accounting](#aaa-accounting)
+- [Management Security](#management-security)
+- [Aliases](#aliases)
+- [Monitoring](#monitoring)
+  - [TerminAttr Daemon](#terminattr-daemon)
+  - [Logging](#logging)
+  - [SNMP](#snmp)
+  - [SFlow](#sflow)
+  - [Hardware Counters](#hardware-counters)
+  - [VM Tracer Sessions](#vm-tracer-sessions)
+  - [Event Handler](#event-handler)
+- [MLAG](#mlag)
+- [Spanning Tree](#spanning-tree)
+- [Internal VLAN Allocation Policy](#internal-vlan-allocation-policy)
+- [VLANs](#vlans)
+- [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
+  - [Ethernet Interfaces](#ethernet-interfaces)
+  - [Port-Channel Interfaces](#port-channel-interfaces)
+  - [Loopback Interfaces](#loopback-interfaces)
+  - [VLAN Interfaces](#vlan-interfaces)
+  - [VXLAN Interface](#vxlan-interface)
+- [Routing](#routing)
+  - [Virtual Router MAC Address](#virtual-router-mac-address)
+  - [IP Routing](#ip-routing)
+  - [IPv6 Routing](#ipv6-routing)
+  - [Static Routes](#static-routes)
+  - [IPv6 Static Routes](#ipv6-static-routes)
+  - [Router OSPF](#router-ospf)
+  - [Router ISIS](#router-isis)
+  - [Router BGP](#router-bgp)
+  - [Router BFD](#router-bfd)
+- [Multicast](#multicast)
+  - [IP IGMP Snooping](#ip-igmp-snooping)
+  - [Router Multicast](#router-multicast)
+  - [Router PIM Sparse Mode](#router-pim-sparse-mode)
+- [Filters](#filters)
+  - [Community-lists](#community-lists)
+  - [Peer Filters](#peer-filters)
+  - [Prefix-lists](#prefix-lists)
+  - [IPv6 Prefix-lists](#ipv6-prefix-lists)
+  - [Route-maps](#route-maps)
+  - [IP Extended Communities](#ip-extended-communities)
+- [ACL](#acl)
+  - [Standard Access-lists](#standard-access-lists)
+  - [Extended Access-lists](#extended-access-lists)
+  - [IPv6 Standard Access-lists](#ipv6-standard-access-lists)
+  - [IPv6 Extended Access-lists](#ipv6-extended-access-lists)
+- [VRF Instances](#vrf-instances)
+- [Virtual Source NAT](#virtual-source-nat)
+- [Platform](#platform)
+- [Router L2 VPN](#router-l2-vpn)
+- [IP DHCP Relay](#ip-dhcp-relay)
+- [Errdisable](#errdisable)
+- [MAC security](#mac-security)
+- [QOS](#qos)
+- [QOS Profiles](#qos-profiles)
+
+# Management
+
 ## Management Interfaces
 
 ### Management Interfaces Summary
 
-IPv4
+#### IPv4
 
 | Management Interface | description | VRF | IP Address | Gateway |
 | -------------------- | ----------- | --- | ---------- | ------- |
-| Management1 | oob_management | MGMT | 10.255.0.14/24 | 10.255.0.1 |
+| Management1 | oob_management | MGMT | 10.73.3.4/16 | 10.73.0.1 |
 
-IPv6
+#### IPv6
 
 | Management Interface | description | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | --- | ------------ | ------------ |
-| Management1 | oob_management | MGMT | ||
+| Management1 | oob_management | MGMT | -  | - |
 
 ### Management Interfaces Device Configuration
 
 ```eos
+!
 interface Management1
    description oob_management
-   vrf MGMT
-   ip address 10.255.0.14/24
-!
-```
-
-## Hardware Counters
-
-No Hardware Counters defined
-
-## Aliases
-Aliases not defined
-
-## TerminAttr Daemon
-
-### TerminAttr Daemon Summary
-
-| CV Compression | Ingest gRPC URL | Ingest Authentication Key | Smash Excludes | Ingest Exclude | Ingest VRF |  NTP VRF |
-| -------------- | --------------- | ------------------------- | -------------- | -------------- | ---------- | -------- |
-| gzip | 10.255.0.1:9910 |  | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | MGMT | MGMT |
-
-### TerminAttr Daemon Device Configuration
-
-```eos
-daemon TerminAttr
-   exec /usr/bin/TerminAttr -ingestgrpcurl=10.255.0.1:9910 -cvcompression=gzip -ingestauth=key, -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -ingestvrf=MGMT -taillogs
    no shutdown
-!
+   vrf MGMT
+   ip address 10.73.3.4/16
 ```
 
-## Internal VLAN allocation Policy
+## DNS Domain
 
-### Internal VLAN Allocation Policy Summary
+### DNS domain: lon.aristanetworks.com
 
-| Policy Allocation | Range Beginning | Range Ending |
-| ------------------| --------------- | ------------ |
-| ascending | 1006 | 1199 |
-
-### Internal VLAN Allocation Policy Configuration
+### DNS Domain Device Configuration
 
 ```eos
-vlan internal order ascending range 1006 1199
+!
+dns domain lon.aristanetworks.com
 !
 ```
 
-## IP IGMP Snooping
+## Domain-list
 
-
-## Logging
-
-No logging settings defined
-
-## Domain Lookup
-
-DNS domain lookup not defined
+Domain-list not defined
 
 ## Name Servers
 
@@ -82,99 +129,83 @@ DNS domain lookup not defined
 
 | Name Server | Source VRF |
 | ----------- | ---------- |
-| 192.168.2.1 | MGMT |
-| 8.8.8.8 | MGMT |
+| 10.73.0.1 | MGMT |
 
 ### Name Servers Device Configuration
 
 ```eos
-ip name-server vrf MGMT 192.168.2.1
-ip name-server vrf MGMT 8.8.8.8
-!
+ip name-server vrf MGMT 10.73.0.1
 ```
 
-## DNS Domain
+## Domain Lookup
 
-DNS domain not defined
+DNS domain lookup not defined
 
 ## NTP
 
 ### NTP Summary
 
-Local Interface: Management1
+- Local Interface: Management1
 
-VRF: MGMT
-
+- VRF: MGMT
 
 | Node | Primary |
 | ---- | ------- |
-| 0.fr.pool.ntp.org | true |
-| 1.fr.pool.ntp.org | - |
+| 10.73.0.1 | true |
 
 ### NTP Device Configuration
 
 ```eos
-ntp local-interface vrf MGMT Management1
-ntp server vrf MGMT 0.fr.pool.ntp.org prefer
-ntp server vrf MGMT 1.fr.pool.ntp.org
 !
+ntp local-interface vrf MGMT Management1
+ntp server vrf MGMT 10.73.0.1 prefer
 ```
 
-## Router L2 VPN
+## PTP
 
-Router L2 VPN not defined
+PTP is not defined.
 
-## SFlow
+## Management SSH
 
-No sFlow defined
+Management SSH not defined
 
-## Spanning Tree
+## Management API GNMI
 
-### Spanning Tree Summary
+Management API gnmi is not defined
 
-Mode: mstp
+## Management API HTTP
 
-**MSTP Instance and Priority**:
+### Management API HTTP Summary
 
-| Instance | Priority |
-| -------- | -------- |
-| 0 | 4096 |
+| HTTP | HTTPS |
+| ---------- | ---------- |
+|  default  |  true  |
 
-### Spanning Tree Device Configuration
+### Management API VRF Access
+
+| VRF Name | IPv4 ACL | IPv6 ACL |
+| -------- | -------- | -------- |
+| MGMT |  -  |  -  |
+
+### Management API HTTP Configuration
 
 ```eos
-spanning-tree mode mstp
-no spanning-tree vlan-id 4094
-spanning-tree mst 0 priority 4096
 !
+management api http-commands
+   protocol https
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
 ```
 
-
-TACACS Servers Not Configured
-
-
-IP TACACS source interfaces not defined
-
-
-AAA server groups not defined
-
-## AAA Authentication
-
-AAA authentication not defined
-
-## AAA Authorization
-
-AAA authorization not defined
-
-## AAA Accounting
-
-AAA accounting not defined
+# Authentication
 
 ## Local Users
 
 ### Local Users Summary
 
-| User | Privilege | role |
+| User | Privilege | Role |
 | ---- | --------- | ---- |
 | admin | 15 | network-admin |
 | ansible | 15 | network-admin |
@@ -183,15 +214,202 @@ AAA accounting not defined
 ### Local Users Device Configuration
 
 ```eos
-username admin privilege 15 role network-admin secret sha512 $6$Df86J4/SFMDE3/1K$Hef4KstdoxNDaami37cBquTWOTplC.miMPjXVgQxMe92.e5wxlnXOLlebgPj8Fz1KO0za/RCO7ZIs4Q6Eiq1g1
-username ansible privilege 15 role network-admin secret sha512 $6$Dzu11L7yp9j3nCM9$FSptxMPyIL555OMO.ldnjDXgwZmrfMYwHSr0uznE5Qoqvd9a6UdjiFcJUhGLtvXVZR1r.A/iF5aAt50hf/EK4/
-username cvpadmin privilege 15 role network-admin secret sha512 $6$rZKcbIZ7iWGAWTUM$TCgDn1KcavS0s.OV8lacMTUkxTByfzcGlFlYUWroxYuU7M/9bIodhRO7nXGzMweUxvbk8mJmQl8Bh44cRktUj.
+!
+username admin privilege 15 role network-admin secret sha512 $6$qDzD2KQXoyPAYiKW$44OfXUXfvwKXJZcJ4/MOljDk8HxONlzJHjcYGPNxeU0JHvB2fyVBBdhph239vRrFcobF5H3/5J2etJljjhhiQ.
+username ansible privilege 15 role network-admin secret sha512 $6$/OcMpqcR8opsfwLC$Ui9GUIQH2WcykVQKsbZccT53QN./PWbd2Zn5pipvoqbTJMSE9SWwJnoN5eGq2A/bM9wMcoMrP.nyUDAbgZcLF0
+username cvpadmin privilege 15 role network-admin secret sha512 $6$qgSkkn4vOILubEVA$eGaW0WVo6ZooKdSAfNMUpZKZ1hSn1cHh5xYIPFsB83C.UIOPg0TRRBoPypKKgEpmhdPdbgOQjh7IazXhtv.191
+```
+
+## Enable Password
+
+Enable password not defined
+
+## TACACS Servers
+
+TACACS servers not defined
+
+## IP TACACS Source Interfaces
+
+IP TACACS source interfaces not defined
+
+## RADIUS Servers
+
+RADIUS servers not defined
+
+## AAA Server Groups
+
+AAA server groups not defined
+
+## AAA Authentication
+
+### AAA Authentication Summary
+
+| Type | Sub-type | User Stores |
+| ---- | -------- | ---------- |
+
+Policy local allow-nopassword-remote-login has been enabled.
+
+### AAA Authentication Device Configuration
+
+```eos
+!
+aaa authentication policy local allow-nopassword-remote-login
 !
 ```
 
-## VLANs
+## AAA Authorization
 
-### VLANs Summary
+### AAA Authorization Summary
+
+| Type | User Stores |
+| ---- | ----------- |
+| Exec | local |
+
+Authorization for configuration commands is disabled.
+
+### AAA Authorization Device Configuration
+
+```eos
+!
+aaa authorization exec default local
+!
+```
+
+## AAA Accounting
+
+AAA accounting not defined
+
+# Management Security
+
+Management security not defined
+
+# Aliases
+
+
+```
+alias sarp show ip arp
+alias senz show interface counter error | nz
+alias sib show ip bgp
+alias sibs show ip bgp summary
+alias siib show ip int brief
+alias sir show ip route
+alias smac show mac address-table dynamic
+alias snz show interface counter | nz
+alias spd show port-channel %1 detail all
+alias sps show port-channel summary
+alias sqnz show interface counter queue | nz
+alias srnz show interface counter rate | nz
+!
+```
+# Monitoring
+
+## TerminAttr Daemon
+
+### TerminAttr Daemon Summary
+
+| CV Compression | Ingest gRPC URL | Ingest Authentication Key | Smash Excludes | Ingest Exclude | Ingest VRF |  NTP VRF | AAA Disabled |
+| -------------- | --------------- | ------------------------- | -------------- | -------------- | ---------- | -------- | ------ |
+| gzip | 10.83.31.63:9910 | Arista123 | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | MGMT | MGMT | False |
+
+### TerminAttr Daemon Device Configuration
+
+```eos
+!
+daemon TerminAttr
+   exec /usr/bin/TerminAttr -ingestgrpcurl=10.83.31.63:9910 -cvcompression=gzip -ingestauth=key,Arista123 -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -ingestvrf=MGMT -taillogs
+   no shutdown
+```
+
+## Logging
+
+No logging settings defined
+
+## SNMP
+
+No SNMP settings defined
+
+## SFlow
+
+No sFlow defined
+
+## Hardware Counters
+
+No hardware counters defined
+
+## VM Tracer Sessions
+
+No VM tracer sessions defined
+
+## Event Handler
+
+No event handler defined
+
+# MLAG
+
+## MLAG Summary
+
+| Domain-id | Local-interface | Peer-address | Peer-link |
+| --------- | --------------- | ------------ | --------- |
+| DC1_LEAF1 | Vlan4094 | 10.255.252.0 | Port-Channel3 |
+
+Dual primary detection is disabled.
+
+## MLAG Device Configuration
+
+```eos
+!
+mlag configuration
+   domain-id DC1_LEAF1
+   local-interface Vlan4094
+   peer-address 10.255.252.0
+   peer-link Port-Channel3
+   reload-delay mlag 300
+   reload-delay non-mlag 330
+```
+
+# Spanning Tree
+
+## Spanning Tree Summary
+
+STP mode: **mstp**
+
+### MSTP Instance and Priority
+
+| Instance(s) | Priority |
+| -------- | -------- |
+| 0 | 4096 |
+
+### Global Spanning-Tree Settings
+
+Spanning Tree disabled for VLANs: **4093-4094**
+
+## Spanning Tree Device Configuration
+
+```eos
+!
+spanning-tree mode mstp
+no spanning-tree vlan-id 4093-4094
+spanning-tree mst 0 priority 4096
+```
+
+# Internal VLAN Allocation Policy
+
+## Internal VLAN Allocation Policy Summary
+
+| Policy Allocation | Range Beginning | Range Ending |
+| ------------------| --------------- | ------------ |
+| ascending | 1006 | 1199 |
+
+## Internal VLAN Allocation Policy Configuration
+
+```eos
+!
+vlan internal order ascending range 1006 1199
+```
+
+# VLANs
+
+## VLANs Summary
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
@@ -225,9 +443,10 @@ username cvpadmin privilege 15 role network-admin secret sha512 $6$rZKcbIZ7iWGAW
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3  |
 | 4094 | MLAG_PEER | MLAG  |
 
-### VLANs Device Configuration
+## VLANs Device Configuration
 
 ```eos
+!
 vlan 110
    name Tenant_A_OP_Zone_1
 !
@@ -325,65 +544,88 @@ vlan 4093
 vlan 4094
    name MLAG_PEER
    trunk group MLAG
-!
 ```
 
-## VRF Instances
+# Interfaces
 
-### VRF Instances Summary
+## Interface Defaults
 
-| VRF Name | IP Routing |
-| -------- | ---------- |
-| MGMT |  disabled |
-| Tenant_A_APP_Zone |  enabled |
-| Tenant_A_DB_Zone |  enabled |
-| Tenant_A_OP_Zone |  enabled |
-| Tenant_A_WAN_Zone |  enabled |
-| Tenant_A_WEB_Zone |  enabled |
-| Tenant_B_OP_Zone |  enabled |
-| Tenant_B_WAN_Zone |  enabled |
-| Tenant_C_OP_Zone |  enabled |
-| Tenant_C_WAN_Zone |  enabled |
+No Interface Defaults defined
 
-### VRF Instances Device Configuration
+## Ethernet Interfaces
+
+### Ethernet Interfaces Summary
+
+#### L2
+
+| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
+| --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
+| Ethernet3 | MLAG_PEER_DC1-LEAF1A_Ethernet3 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 3 |
+| Ethernet4 | MLAG_PEER_DC1-LEAF1A_Ethernet4 | *trunk | *2-4094 | *- | *['LEAF_PEER_L3', 'MLAG'] | 3 |
+| Ethernet5 | DC1-L2LEAF1A_Ethernet2 | *trunk | *110-112,120-121,130-131 | *- | *- | 5 |
+
+*Inherited from Port-Channel Interface
+
+#### IPv4
+
+| Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
+| --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
+| Ethernet1 |  P2P_LINK_TO_DC1-SPINE01_Ethernet2  |  routed  | - |  172.31.255.5/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet2 |  P2P_LINK_TO_DC1-SPINE02_Ethernet2  |  routed  | - |  172.31.255.7/31  |  default  |  1500  |  false  |  -  |  -  |
+
+### Ethernet Interfaces Device Configuration
 
 ```eos
-vrf instance MGMT
 !
-vrf instance Tenant_A_APP_Zone
+interface Ethernet1
+   description P2P_LINK_TO_DC1-SPINE01_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.5/31
 !
-vrf instance Tenant_A_DB_Zone
+interface Ethernet2
+   description P2P_LINK_TO_DC1-SPINE02_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.7/31
 !
-vrf instance Tenant_A_OP_Zone
+interface Ethernet3
+   description MLAG_PEER_DC1-LEAF1A_Ethernet3
+   no shutdown
+   channel-group 3 mode active
 !
-vrf instance Tenant_A_WAN_Zone
+interface Ethernet4
+   description MLAG_PEER_DC1-LEAF1A_Ethernet4
+   no shutdown
+   channel-group 3 mode active
 !
-vrf instance Tenant_A_WEB_Zone
-!
-vrf instance Tenant_B_OP_Zone
-!
-vrf instance Tenant_B_WAN_Zone
-!
-vrf instance Tenant_C_OP_Zone
-!
-vrf instance Tenant_C_WAN_Zone
-!
+interface Ethernet5
+   description DC1-L2LEAF1A_Ethernet2
+   no shutdown
+   channel-group 5 mode active
 ```
 
 ## Port-Channel Interfaces
 
 ### Port-Channel Interfaces Summary
 
-| Interface | Description | MTU | Type | Mode | Allowed VLANs (trunk) | Trunk Group | MLAG ID | VRF | IP Address | IPv6 Address |
-| --------- | ----------- | --- | ---- | ---- | --------------------- | ----------- | ------- | --- | ---------- | ------------ |
-| Port-Channel3 | MLAG_PEER_DC1-LEAF1A_Po3 | 1500 | switched | trunk | 2-4094 | LEAF_PEER_L3<br> MLAG | - | - | - | - |
-| Port-Channel5 | DC1_L2LEAF1_Po1 | 1500 | switched | trunk | 110-112,120-121,130-131 | - | 5 | - | - | - |
+#### L2
+
+| Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
+| --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
+| Port-Channel3 | MLAG_PEER_DC1-LEAF1A_Po3 | switched | trunk | 2-4094 | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
+| Port-Channel5 | DC1_L2LEAF1_Po1 | switched | trunk | 110-112,120-121,130-131 | - | - | - | - | 5 | - |
 
 ### Port-Channel Interfaces Device Configuration
 
 ```eos
+!
 interface Port-Channel3
    description MLAG_PEER_DC1-LEAF1A_Po3
+   no shutdown
+   switchport
    switchport trunk allowed vlan 2-4094
    switchport mode trunk
    switchport trunk group LEAF_PEER_L3
@@ -391,266 +633,303 @@ interface Port-Channel3
 !
 interface Port-Channel5
    description DC1_L2LEAF1_Po1
+   no shutdown
+   switchport
    switchport trunk allowed vlan 110-112,120-121,130-131
    switchport mode trunk
    mlag 5
-!
-```
-
-## Ethernet Interfaces
-
-### Ethernet Interfaces Summary
-
-| Interface | Description | MTU | Type | Mode | Allowed VLANs (Trunk) | Trunk Group | VRF | IP Address | Channel-Group ID | Channel-Group Type |
-| --------- | ----------- | --- | ---- | ---- | --------------------- | ----------- | --- | ---------- | ---------------- | ------------------ |
-| Ethernet1 | P2P_LINK_TO_DC1-SPINE1_Ethernet2 | 1500 | routed | access | - | - | - | 172.31.255.5/31 | - | - |
-| Ethernet2 | P2P_LINK_TO_DC1-SPINE2_Ethernet2 | 1500 | routed | access | - | - | - | 172.31.255.7/31 | - | - |
-| Ethernet3 | MLAG_PEER_DC1-LEAF1A_Ethernet3 | *1500 | *switched | *trunk | *2-4094 | *LEAF_PEER_L3<br> *MLAG | - | - | 3 | active |
-| Ethernet4 | MLAG_PEER_DC1-LEAF1A_Ethernet4 | *1500 | *switched | *trunk | *2-4094 | *LEAF_PEER_L3<br> *MLAG | - | - | 3 | active |
-| Ethernet5 | DC1-L2LEAF1A_Ethernet2 | *1500 | *switched | *trunk | *110-112,120-121,130-131 | - | - | - | 5 | active |
-
-*Inherited from Port-Channel Interface
-
-### Ethernet Interfaces Device Configuration
-
-```eos
-interface Ethernet1
-   description P2P_LINK_TO_DC1-SPINE1_Ethernet2
-   no switchport
-   ip address 172.31.255.5/31
-!
-interface Ethernet2
-   description P2P_LINK_TO_DC1-SPINE2_Ethernet2
-   no switchport
-   ip address 172.31.255.7/31
-!
-interface Ethernet3
-   description MLAG_PEER_DC1-LEAF1A_Ethernet3
-   channel-group 3 mode active
-!
-interface Ethernet4
-   description MLAG_PEER_DC1-LEAF1A_Ethernet4
-   channel-group 3 mode active
-!
-interface Ethernet5
-   description DC1-L2LEAF1A_Ethernet2
-   channel-group 5 mode active
-!
 ```
 
 ## Loopback Interfaces
 
 ### Loopback Interfaces Summary
 
-IPv4
+#### IPv4
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | EVPN_Overlay_Peering | Global Routing Table | 192.168.255.4/32 |
-| Loopback1 | VTEP_VXLAN_Tunnel_Source | Global Routing Table | 192.168.254.3/32 |
+| Loopback0 | EVPN_Overlay_Peering | default | 192.168.255.4/32 |
+| Loopback1 | VTEP_VXLAN_Tunnel_Source | default | 192.168.254.3/32 |
 | Loopback100 | Tenant_A_OP_Zone_VTEP_DIAGNOSTICS | Tenant_A_OP_Zone | 10.255.1.4/32 |
 
-IPv6
+#### IPv6
 
 | Interface | Description | VRF | IPv6 Address |
 | --------- | ----------- | --- | ------------ |
-| Loopback0 | EVPN_Overlay_Peering | Global Routing Table | - |
-| Loopback1 | VTEP_VXLAN_Tunnel_Source | Global Routing Table | - |
+| Loopback0 | EVPN_Overlay_Peering | default | - |
+| Loopback1 | VTEP_VXLAN_Tunnel_Source | default | - |
 | Loopback100 | Tenant_A_OP_Zone_VTEP_DIAGNOSTICS | Tenant_A_OP_Zone | - |
+
 
 ### Loopback Interfaces Device Configuration
 
 ```eos
+!
 interface Loopback0
    description EVPN_Overlay_Peering
+   no shutdown
    ip address 192.168.255.4/32
 !
 interface Loopback1
    description VTEP_VXLAN_Tunnel_Source
+   no shutdown
    ip address 192.168.254.3/32
 !
 interface Loopback100
    description Tenant_A_OP_Zone_VTEP_DIAGNOSTICS
+   no shutdown
    vrf Tenant_A_OP_Zone
    ip address 10.255.1.4/32
-!
 ```
 
 ## VLAN Interfaces
 
 ### VLAN Interfaces Summary
 
-| Interface | Description | VRF | IP Address | IP Address Virtual | IP Router Virtual Address (vARP) |
-| --------- | ----------- | --- | ---------- | ------------------ | -------------------------------- |
-| Vlan110 | Tenant_A_OP_Zone_1 | Tenant_A_OP_Zone | - | 10.1.10.1/24 | - |
-| Vlan111 | Tenant_A_OP_Zone_2 | Tenant_A_OP_Zone | - | 10.1.11.1/24 | - |
-| Vlan112 | Tenant_A_OP_Zone_3 | Tenant_A_OP_Zone | - | 10.1.12.254/24 | - |
-| Vlan120 | Tenant_A_WEB_Zone_1 | Tenant_A_WEB_Zone | - | - | - |
-| Vlan121 | Tenant_A_WEBZone_2 | Tenant_A_WEB_Zone | - | 10.1.21.1/24 | - |
-| Vlan130 | Tenant_A_APP_Zone_1 | Tenant_A_APP_Zone | - | - | - |
-| Vlan131 | Tenant_A_APP_Zone_2 | Tenant_A_APP_Zone | - | 10.1.31.254/24 | - |
-| Vlan140 | Tenant_A_DB_BZone_1 | Tenant_A_DB_Zone | - | 10.1.40.1/24 | - |
-| Vlan141 | Tenant_A_DB_Zone_2 | Tenant_A_DB_Zone | - | 10.1.41.1/24 | - |
-| Vlan150 | Tenant_A_WAN_Zone_1 | Tenant_A_WAN_Zone | - | 10.1.40.1/24 | - |
-| Vlan210 | Tenant_B_OP_Zone_1 | Tenant_B_OP_Zone | - | - | - |
-| Vlan211 | Tenant_B_OP_Zone_2 | Tenant_B_OP_Zone | - | 10.2.11.1/24 | - |
-| Vlan250 | Tenant_B_WAN_Zone_1 | Tenant_B_WAN_Zone | - | 10.2.50.1/24 | - |
-| Vlan310 | Tenant_C_OP_Zone_1 | Tenant_C_OP_Zone | - | - | - |
-| Vlan311 | Tenant_C_OP_Zone_2 | Tenant_C_OP_Zone | - | - | - |
-| Vlan350 | Tenant_C_WAN_Zone_1 | Tenant_C_WAN_Zone | - | - | - |
-| Vlan3009 | MLAG_PEER_L3_iBGP: vrf Tenant_A_OP_Zone | Tenant_A_OP_Zone | 10.255.251.1/31 | - | - |
-| Vlan3010 | MLAG_PEER_L3_iBGP: vrf Tenant_A_WEB_Zone | Tenant_A_WEB_Zone | 10.255.251.1/31 | - | - |
-| Vlan3011 | MLAG_PEER_L3_iBGP: vrf Tenant_A_APP_Zone | Tenant_A_APP_Zone | 10.255.251.1/31 | - | - |
-| Vlan3012 | MLAG_PEER_L3_iBGP: vrf Tenant_A_DB_Zone | Tenant_A_DB_Zone | 10.255.251.1/31 | - | - |
-| Vlan3013 | MLAG_PEER_L3_iBGP: vrf Tenant_A_WAN_Zone | Tenant_A_WAN_Zone | 10.255.251.1/31 | - | - |
-| Vlan3019 | MLAG_PEER_L3_iBGP: vrf Tenant_B_OP_Zone | Tenant_B_OP_Zone | 10.255.251.1/31 | - | - |
-| Vlan3020 | MLAG_PEER_L3_iBGP: vrf Tenant_B_WAN_Zone | Tenant_B_WAN_Zone | 10.255.251.1/31 | - | - |
-| Vlan3029 | MLAG_PEER_L3_iBGP: vrf Tenant_C_OP_Zone | Tenant_C_OP_Zone | 10.255.251.1/31 | - | - |
-| Vlan3030 | MLAG_PEER_L3_iBGP: vrf Tenant_C_WAN_Zone | Tenant_C_WAN_Zone | 10.255.251.1/31 | - | - |
-| Vlan4093 | MLAG_PEER_L3_PEERING | Global Routing Table | 10.255.251.1/31 | - | - |
-| Vlan4094 | MLAG_PEER | Global Routing Table | 10.255.252.1/31 | - | - |
+| Interface | Description | VRF |  MTU | Shutdown |
+| --------- | ----------- | --- | ---- | -------- |
+| Vlan110 |  Tenant_A_OP_Zone_1  |  Tenant_A_OP_Zone  |  -  |  false  |
+| Vlan111 |  Tenant_A_OP_Zone_2  |  Tenant_A_OP_Zone  |  -  |  false  |
+| Vlan112 |  Tenant_A_OP_Zone_3  |  Tenant_A_OP_Zone  |  -  |  false  |
+| Vlan120 |  Tenant_A_WEB_Zone_1  |  Tenant_A_WEB_Zone  |  -  |  false  |
+| Vlan121 |  Tenant_A_WEBZone_2  |  Tenant_A_WEB_Zone  |  -  |  false  |
+| Vlan130 |  Tenant_A_APP_Zone_1  |  Tenant_A_APP_Zone  |  -  |  false  |
+| Vlan131 |  Tenant_A_APP_Zone_2  |  Tenant_A_APP_Zone  |  -  |  false  |
+| Vlan140 |  Tenant_A_DB_BZone_1  |  Tenant_A_DB_Zone  |  -  |  false  |
+| Vlan141 |  Tenant_A_DB_Zone_2  |  Tenant_A_DB_Zone  |  -  |  false  |
+| Vlan150 |  Tenant_A_WAN_Zone_1  |  Tenant_A_WAN_Zone  |  -  |  false  |
+| Vlan210 |  Tenant_B_OP_Zone_1  |  Tenant_B_OP_Zone  |  -  |  false  |
+| Vlan211 |  Tenant_B_OP_Zone_2  |  Tenant_B_OP_Zone  |  -  |  false  |
+| Vlan250 |  Tenant_B_WAN_Zone_1  |  Tenant_B_WAN_Zone  |  -  |  false  |
+| Vlan310 |  Tenant_C_OP_Zone_1  |  Tenant_C_OP_Zone  |  -  |  false  |
+| Vlan311 |  Tenant_C_OP_Zone_2  |  Tenant_C_OP_Zone  |  -  |  false  |
+| Vlan350 |  Tenant_C_WAN_Zone_1  |  Tenant_C_WAN_Zone  |  -  |  false  |
+| Vlan3009 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_OP_Zone  |  Tenant_A_OP_Zone  |  1500  |  false  |
+| Vlan3010 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_WEB_Zone  |  Tenant_A_WEB_Zone  |  1500  |  false  |
+| Vlan3011 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_APP_Zone  |  Tenant_A_APP_Zone  |  1500  |  false  |
+| Vlan3012 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_DB_Zone  |  Tenant_A_DB_Zone  |  1500  |  false  |
+| Vlan3013 |  MLAG_PEER_L3_iBGP: vrf Tenant_A_WAN_Zone  |  Tenant_A_WAN_Zone  |  1500  |  false  |
+| Vlan3019 |  MLAG_PEER_L3_iBGP: vrf Tenant_B_OP_Zone  |  Tenant_B_OP_Zone  |  1500  |  false  |
+| Vlan3020 |  MLAG_PEER_L3_iBGP: vrf Tenant_B_WAN_Zone  |  Tenant_B_WAN_Zone  |  1500  |  false  |
+| Vlan3029 |  MLAG_PEER_L3_iBGP: vrf Tenant_C_OP_Zone  |  Tenant_C_OP_Zone  |  1500  |  false  |
+| Vlan3030 |  MLAG_PEER_L3_iBGP: vrf Tenant_C_WAN_Zone  |  Tenant_C_WAN_Zone  |  1500  |  false  |
+| Vlan4093 |  MLAG_PEER_L3_PEERING  |  default  |  1500  |  false  |
+| Vlan4094 |  MLAG_PEER  |  default  |  1500  |  false  |
+
+#### IPv4
+
+| Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | VRRP | ACL In | ACL Out |
+| --------- | --- | ---------- | ------------------ | ------------------------- | ---- | ------ | ------- |
+| Vlan110 |  Tenant_A_OP_Zone  |  -  |  10.1.10.1/24  |  -  |  -  |  -  |  -  |
+| Vlan111 |  Tenant_A_OP_Zone  |  -  |  10.1.11.1/24  |  -  |  -  |  -  |  -  |
+| Vlan112 |  Tenant_A_OP_Zone  |  -  |  10.1.12.254/24  |  -  |  -  |  -  |  -  |
+| Vlan120 |  Tenant_A_WEB_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan121 |  Tenant_A_WEB_Zone  |  -  |  10.1.21.1/24  |  -  |  -  |  -  |  -  |
+| Vlan130 |  Tenant_A_APP_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan131 |  Tenant_A_APP_Zone  |  -  |  10.1.31.254/24  |  -  |  -  |  -  |  -  |
+| Vlan140 |  Tenant_A_DB_Zone  |  -  |  10.1.40.1/24  |  -  |  -  |  -  |  -  |
+| Vlan141 |  Tenant_A_DB_Zone  |  -  |  10.1.41.1/24  |  -  |  -  |  -  |  -  |
+| Vlan150 |  Tenant_A_WAN_Zone  |  -  |  10.1.40.1/24  |  -  |  -  |  -  |  -  |
+| Vlan210 |  Tenant_B_OP_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan211 |  Tenant_B_OP_Zone  |  -  |  10.2.11.1/24  |  -  |  -  |  -  |  -  |
+| Vlan250 |  Tenant_B_WAN_Zone  |  -  |  10.2.50.1/24  |  -  |  -  |  -  |  -  |
+| Vlan310 |  Tenant_C_OP_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan311 |  Tenant_C_OP_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan350 |  Tenant_C_WAN_Zone  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3009 |  Tenant_A_OP_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3010 |  Tenant_A_WEB_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3011 |  Tenant_A_APP_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3012 |  Tenant_A_DB_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3013 |  Tenant_A_WAN_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3019 |  Tenant_B_OP_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3020 |  Tenant_B_WAN_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3029 |  Tenant_C_OP_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3030 |  Tenant_C_WAN_Zone  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan4093 |  default  |  10.255.251.1/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan4094 |  default  |  10.255.252.1/31  |  -  |  -  |  -  |  -  |  -  |
+
+
 
 ### VLAN Interfaces Device Configuration
 
 ```eos
+!
 interface Vlan110
    description Tenant_A_OP_Zone_1
+   no shutdown
    vrf Tenant_A_OP_Zone
    ip address virtual 10.1.10.1/24
 !
 interface Vlan111
    description Tenant_A_OP_Zone_2
+   no shutdown
    vrf Tenant_A_OP_Zone
    ip address virtual 10.1.11.1/24
 !
 interface Vlan112
    description Tenant_A_OP_Zone_3
+   no shutdown
    vrf Tenant_A_OP_Zone
    ip address virtual 10.1.12.254/24
 !
 interface Vlan120
    description Tenant_A_WEB_Zone_1
+   no shutdown
    vrf Tenant_A_WEB_Zone
 !
 interface Vlan121
    description Tenant_A_WEBZone_2
+   no shutdown
    vrf Tenant_A_WEB_Zone
    ip address virtual 10.1.21.1/24
 !
 interface Vlan130
    description Tenant_A_APP_Zone_1
+   no shutdown
    vrf Tenant_A_APP_Zone
 !
 interface Vlan131
    description Tenant_A_APP_Zone_2
+   no shutdown
    vrf Tenant_A_APP_Zone
    ip address virtual 10.1.31.254/24
 !
 interface Vlan140
    description Tenant_A_DB_BZone_1
+   no shutdown
    vrf Tenant_A_DB_Zone
    ip address virtual 10.1.40.1/24
 !
 interface Vlan141
    description Tenant_A_DB_Zone_2
+   no shutdown
    vrf Tenant_A_DB_Zone
    ip address virtual 10.1.41.1/24
 !
 interface Vlan150
    description Tenant_A_WAN_Zone_1
+   no shutdown
    vrf Tenant_A_WAN_Zone
    ip address virtual 10.1.40.1/24
 !
 interface Vlan210
    description Tenant_B_OP_Zone_1
+   no shutdown
    vrf Tenant_B_OP_Zone
 !
 interface Vlan211
    description Tenant_B_OP_Zone_2
+   no shutdown
    vrf Tenant_B_OP_Zone
    ip address virtual 10.2.11.1/24
 !
 interface Vlan250
    description Tenant_B_WAN_Zone_1
+   no shutdown
    vrf Tenant_B_WAN_Zone
    ip address virtual 10.2.50.1/24
 !
 interface Vlan310
    description Tenant_C_OP_Zone_1
+   no shutdown
    vrf Tenant_C_OP_Zone
 !
 interface Vlan311
    description Tenant_C_OP_Zone_2
+   no shutdown
    vrf Tenant_C_OP_Zone
 !
 interface Vlan350
    description Tenant_C_WAN_Zone_1
+   no shutdown
    vrf Tenant_C_WAN_Zone
 !
 interface Vlan3009
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_OP_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_A_OP_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3010
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_WEB_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_A_WEB_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3011
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_APP_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_A_APP_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3012
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_DB_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_A_DB_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3013
    description MLAG_PEER_L3_iBGP: vrf Tenant_A_WAN_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_A_WAN_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3019
    description MLAG_PEER_L3_iBGP: vrf Tenant_B_OP_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_B_OP_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3020
    description MLAG_PEER_L3_iBGP: vrf Tenant_B_WAN_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_B_WAN_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3029
    description MLAG_PEER_L3_iBGP: vrf Tenant_C_OP_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_C_OP_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan3030
    description MLAG_PEER_L3_iBGP: vrf Tenant_C_WAN_Zone
+   no shutdown
+   mtu 1500
    vrf Tenant_C_WAN_Zone
    ip address 10.255.251.1/31
 !
 interface Vlan4093
    description MLAG_PEER_L3_PEERING
+   no shutdown
+   mtu 1500
    ip address 10.255.251.1/31
 !
 interface Vlan4094
    description MLAG_PEER
+   no shutdown
+   mtu 1500
    no autostate
    ip address 10.255.252.1/31
-!
 ```
 
 ## VXLAN Interface
 
 ### VXLAN Interface Summary
 
-**Source Interface:** Loopback1
-**UDP port:** 4789
+#### Source Interface: Loopback1
 
-**VLAN to VNI Mappings:**
+#### UDP port: 4789
+
+#### VLAN to VNI Mappings
 
 | VLAN | VNI |
 | ---- | --- |
@@ -673,7 +952,7 @@ interface Vlan4094
 | 311 | 30311 |
 | 350 | 30350 |
 
-**VRF to VNI Mappings:**
+#### VRF to VNI Mappings
 
 | VLAN | VNI |
 | ---- | --- |
@@ -690,6 +969,7 @@ interface Vlan4094
 ### VXLAN Interface Device Configuration
 
 ```eos
+!
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
@@ -721,62 +1001,23 @@ interface Vxlan1
    vxlan vrf Tenant_B_WAN_Zone vni 21
    vxlan vrf Tenant_C_OP_Zone vni 30
    vxlan vrf Tenant_C_WAN_Zone vni 31
-!
 ```
 
-## Virtual Router MAC Address & Virtual Source NAT
+# Routing
 
-### Virtual Router MAC Address and Virtual Source NAT Summary
+## Virtual Router MAC Address
 
-**Virtual Router MAC Address:** 00:1c:73:00:dc:01
-### Virtual Source NAT Summary
 
-| Source NAT VRF | Source NAT IP Address |
-| -------------- | --------------------- |
-| Tenant_A_OP_Zone | 10.255.1.4 |
+### Virtual Router MAC Address Summary
 
-### Virtual Router MAC Address Device and Virtual Source NAT Configuration
+#### Virtual Router MAC Address: 00:1c:73:00:dc:01
+
+### Virtual Router MAC Address Configuration
 
 ```eos
+!
 ip virtual-router mac-address 00:1c:73:00:dc:01
-ip address virtual source-nat vrf Tenant_A_OP_Zone address 10.255.1.4
-!
 ```
-
-## IPv6 Extended Access-lists
-
-IPv6 Extended Access-lists not defined
-
-## IPv6 Standard Access-lists
-
-IPv6 Standard Access-lists not defined
-
-## Extended Access-lists
-
-Extended Access-lists not defined
-
-## Standard Access-lists
-
-Standard Access-lists not defined
-
-## Static Routes
-
-### Static Routes Summary
-
-| VRF | Destination Prefix | Fowarding Address / Interface |
-| --- | ------------------ | ----------------------------- |
-| MGMT | 0.0.0.0/0 | 10.255.0.1 |
-
-### Static Routes Device Configuration
-
-```eos
-ip route vrf MGMT 0.0.0.0/0 10.255.0.1
-!
-```
-
-## Event Handler
-
-No Event Handler Defined
 
 ## IP Routing
 
@@ -784,20 +1025,21 @@ No Event Handler Defined
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| MGMT | False |
-| Tenant_A_APP_Zone | True |
-| Tenant_A_DB_Zone | True |
-| Tenant_A_OP_Zone | True |
-| Tenant_A_WAN_Zone | True |
-| Tenant_A_WEB_Zone | True |
-| Tenant_B_OP_Zone | True |
-| Tenant_B_WAN_Zone | True |
-| Tenant_C_OP_Zone | True |
-| Tenant_C_WAN_Zone | True |
+| default | true|| MGMT | false |
+| Tenant_A_APP_Zone | true |
+| Tenant_A_DB_Zone | true |
+| Tenant_A_OP_Zone | true |
+| Tenant_A_WAN_Zone | true |
+| Tenant_A_WEB_Zone | true |
+| Tenant_B_OP_Zone | true |
+| Tenant_B_WAN_Zone | true |
+| Tenant_C_OP_Zone | true |
+| Tenant_C_WAN_Zone | true |
 
 ### IP Routing Device Configuration
 
 ```eos
+!
 ip routing
 no ip routing vrf MGMT
 ip routing vrf Tenant_A_APP_Zone
@@ -809,128 +1051,56 @@ ip routing vrf Tenant_B_OP_Zone
 ip routing vrf Tenant_B_WAN_Zone
 ip routing vrf Tenant_C_OP_Zone
 ip routing vrf Tenant_C_WAN_Zone
-!
 ```
-
-## Prefix Lists
-
-### Prefix Lists Summary
-
-**PL-LOOPBACKS-EVPN-OVERLAY:**
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 192.168.255.0/24 eq 32 |
-| 20 | permit 192.168.254.0/24 eq 32 |
-
-**PL-P2P-UNDERLAY:**
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 172.31.255.0/24 le 31 |
-| 20 | permit 10.255.251.0/24 le 31 |
-
-### Prefix Lists Device Configuration
-
-```eos
-ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 192.168.255.0/24 eq 32
-   seq 20 permit 192.168.254.0/24 eq 32
-!
-ip prefix-list PL-P2P-UNDERLAY
-   seq 10 permit 172.31.255.0/24 le 31
-   seq 20 permit 10.255.251.0/24 le 31
-!
-```
-
-## IPv6 Prefix Lists
-
-IPv6 Prefix lists not defined
 
 ## IPv6 Routing
 
 ### IPv6 Routing Summary
 
-| VRF | IPv6 Routing Enabled |
-| --- | -------------------- |
-| MGMT | False |
-| Tenant_A_APP_Zone | False |
-| Tenant_A_DB_Zone | False |
-| Tenant_A_OP_Zone | False |
-| Tenant_A_WAN_Zone | False |
-| Tenant_A_WEB_Zone | False |
-| Tenant_B_OP_Zone | False |
-| Tenant_B_WAN_Zone | False |
-| Tenant_C_OP_Zone | False |
-| Tenant_C_WAN_Zone | False |
+| VRF | Routing Enabled |
+| --- | --------------- |
+| default | false || MGMT | false |
+| Tenant_A_APP_Zone | false |
+| Tenant_A_DB_Zone | false |
+| Tenant_A_OP_Zone | false |
+| Tenant_A_WAN_Zone | false |
+| Tenant_A_WEB_Zone | false |
+| Tenant_B_OP_Zone | false |
+| Tenant_B_WAN_Zone | false |
+| Tenant_C_OP_Zone | false |
+| Tenant_C_WAN_Zone | false |
 
-### IPv6 Routing Device Configuration
 
-```eos
-```
+## Static Routes
 
-## MLAG
+### Static Routes Summary
 
-### MLAG Summary
+| VRF | Destination Prefix | Next Hop IP             | Exit interface      | Administrative Distance       | Tag               | Route Name                    | Metric         |
+| --- | ------------------ | ----------------------- | ------------------- | ----------------------------- | ----------------- | ----------------------------- | -------------- |
+| MGMT  | 0.0.0.0/0 |  10.73.0.1  |  -  |  1  |  -  |  -  |  - |
 
-| domain-id | local-interface | peer-address | peer-link |
-| --------- | --------------- | ------------ | --------- |
-| DC1_LEAF1 | Vlan4094 | 10.255.252.0 | Port-Channel3 |
-
-Dual primary detection is enabled. The detection delay is 5 seconds.
-
-### MLAG Device Configuration
+### Static Routes Device Configuration
 
 ```eos
-mlag configuration
-   domain-id DC1_LEAF1
-   local-interface Vlan4094
-   peer-address 10.255.252.0
-   peer-address heartbeat 10.255.0.13 vrf MGMT
-   peer-link Port-Channel3
-   dual-primary detection delay 5 action errdisable all-interfaces
-   reload-delay mlag 300
-   reload-delay non-mlag 330
 !
+ip route vrf MGMT 0.0.0.0/0 10.73.0.1
 ```
 
-## Route Maps
+## IPv6 Static Routes
 
-### Route Maps Summary
+IPv6 static routes not defined
 
-**RM-CONN-2-BGP:**
+## ARP
 
-| Sequence | Type | Match and/or Set |
-| -------- | ---- | ---------------- |
-| 10 | permit | match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY |
+Global ARP timeout not defined.
 
-### Route Maps Device Configuration
+## Router OSPF
 
-```eos
-route-map RM-CONN-2-BGP permit 10
-   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-!
-```
+Router OSPF not defined
 
-## Peer Filters
+## Router ISIS
 
-No Peer Filters defined
-
-## Router BFD
-
-### Router BFD Multihop Summary
-
-| Interval | Minimum RX | Multiplier |
-| -------- | ---------- | ---------- |
-| 1200 | 1200 | 3 |
-
-### Router BFD Multihop Device Configuration
-
-```eos
-router bfd
-   multihop interval 1200 min-rx 1200 multiplier 3
-!
-```
+Router ISIS not defined
 
 ## Router BGP
 
@@ -946,54 +1116,64 @@ router bfd
 | distance bgp 20 200 200 |
 | graceful-restart restart-time 300 |
 | graceful-restart |
-| maximum-paths 2 ecmp 2 |
+| maximum-paths 4 ecmp 4 |
 
 ### Router BGP Peer Groups
 
-**EVPN-OVERLAY-PEERS**:
+#### EVPN-OVERLAY-PEERS
 
 | Settings | Value |
 | -------- | ----- |
 | Address Family | evpn |
-| remote_as | 65001 |
-| source | Loopback0 |
-| bfd | true |
-| ebgp multihop | 3 |
-| send community | true |
-| maximum routes | 0 (no limit) |
-**IPv4-UNDERLAY-PEERS**:
+| Source | Loopback0 |
+| Bfd | true |
+| Ebgp multihop | 3 |
+| Send community | true |
+| Maximum routes | 0 (no limit) |
+
+#### IPv4-UNDERLAY-PEERS
 
 | Settings | Value |
 | -------- | ----- |
 | Address Family | ipv4 |
-| remote_as | 65001 |
-| send community | true |
-| maximum routes | 12000 |
-**MLAG-IPv4-UNDERLAY-PEER**:
+| Remote_as | 65001 |
+| Send community | true |
+| Maximum routes | 12000 |
+
+#### MLAG-IPv4-UNDERLAY-PEER
 
 | Settings | Value |
 | -------- | ----- |
 | Address Family | ipv4 |
-| remote_as | 65101 |
-| next-hop self | true |
-| send community | true |
-| maximum routes | 12000 |
+| Remote_as | 65101 |
+| Next-hop self | True |
+| Send community | true |
+| Maximum routes | 12000 |
 
 ### BGP Neighbors
 
-| Neighbor | Remote AS |
-| -------- | ---------
-| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER |
-| 172.31.255.4 | Inherited from peer group IPv4-UNDERLAY-PEERS |
-| 172.31.255.6 | Inherited from peer group IPv4-UNDERLAY-PEERS |
-| 192.168.255.1 | Inherited from peer group EVPN-OVERLAY-PEERS |
-| 192.168.255.2 | Inherited from peer group EVPN-OVERLAY-PEERS |
+| Neighbor | Remote AS | VRF |
+| -------- | --------- | --- |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default |
+| 172.31.255.4 | Inherited from peer group IPv4-UNDERLAY-PEERS | default |
+| 172.31.255.6 | Inherited from peer group IPv4-UNDERLAY-PEERS | default |
+| 192.168.255.1 | 65001 | default |
+| 192.168.255.2 | 65001 | default |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_APP_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_DB_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_OP_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_WAN_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_A_WEB_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_B_OP_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_B_WAN_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_C_OP_Zone |
+| 10.255.251.0 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Tenant_C_WAN_Zone |
 
 ### Router BGP EVPN Address Family
 
 #### Router BGP EVPN MAC-VRFs
 
-**VLAN aware bundles:**
+##### VLAN aware bundles
 
 | VLAN Aware Bundle | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute | VLANs |
 | ----------------- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ | ----- |
@@ -1009,33 +1189,32 @@ router bfd
 | Tenant_C_OP_Zone | 192.168.255.4:30 |  30:30  |  |  | learned | 310-311 |
 | Tenant_C_WAN_Zone | 192.168.255.4:31 |  31:31  |  |  | learned | 350 |
 
-
 #### Router BGP EVPN VRFs
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| Tenant_A_APP_Zone | 192.168.255.4:12 | connected  |
-| Tenant_A_DB_Zone | 192.168.255.4:13 | connected  |
-| Tenant_A_OP_Zone | 192.168.255.4:10 | connected  |
-| Tenant_A_WAN_Zone | 192.168.255.4:14 | connected  |
-| Tenant_A_WEB_Zone | 192.168.255.4:11 | connected  |
-| Tenant_B_OP_Zone | 192.168.255.4:20 | connected  |
-| Tenant_B_WAN_Zone | 192.168.255.4:21 | connected  |
-| Tenant_C_OP_Zone | 192.168.255.4:30 | connected  |
-| Tenant_C_WAN_Zone | 192.168.255.4:31 | connected  |
+| Tenant_A_APP_Zone | 192.168.255.4:12 | connected |
+| Tenant_A_DB_Zone | 192.168.255.4:13 | connected |
+| Tenant_A_OP_Zone | 192.168.255.4:10 | connected |
+| Tenant_A_WAN_Zone | 192.168.255.4:14 | connected |
+| Tenant_A_WEB_Zone | 192.168.255.4:11 | connected |
+| Tenant_B_OP_Zone | 192.168.255.4:20 | connected |
+| Tenant_B_WAN_Zone | 192.168.255.4:21 | connected |
+| Tenant_C_OP_Zone | 192.168.255.4:30 | connected |
+| Tenant_C_WAN_Zone | 192.168.255.4:31 | connected |
 
 ### Router BGP Device Configuration
 
 ```eos
+!
 router bgp 65101
    router-id 192.168.255.4
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    graceful-restart restart-time 300
    graceful-restart
-   maximum-paths 2 ecmp 2
+   maximum-paths 4 ecmp 4
    neighbor EVPN-OVERLAY-PEERS peer group
-   neighbor EVPN-OVERLAY-PEERS remote-as 65001
    neighbor EVPN-OVERLAY-PEERS update-source Loopback0
    neighbor EVPN-OVERLAY-PEERS bfd
    neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
@@ -1053,11 +1232,16 @@ router bgp 65101
    neighbor MLAG-IPv4-UNDERLAY-PEER password 7 vnEaG8gMeQf3d3cN6PktXQ==
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
    neighbor MLAG-IPv4-UNDERLAY-PEER maximum-routes 12000
+   neighbor MLAG-IPv4-UNDERLAY-PEER route-map RM-MLAG-PEER-IN in
    neighbor 10.255.251.0 peer group MLAG-IPv4-UNDERLAY-PEER
    neighbor 172.31.255.4 peer group IPv4-UNDERLAY-PEERS
    neighbor 172.31.255.6 peer group IPv4-UNDERLAY-PEERS
    neighbor 192.168.255.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.1 remote-as 65001
+   neighbor 192.168.255.1 description DC1-SPINE01
    neighbor 192.168.255.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.2 remote-as 65001
+   neighbor 192.168.255.2 description DC1-SPINE02
    redistribute connected route-map RM-CONN-2-BGP
    !
    vlan-aware-bundle Tenant_A_APP_Zone
@@ -1128,8 +1312,6 @@ router bgp 65101
    !
    address-family evpn
       neighbor EVPN-OVERLAY-PEERS activate
-      no neighbor IPv4-UNDERLAY-PEERS activate
-      no neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
    address-family ipv4
       no neighbor EVPN-OVERLAY-PEERS activate
@@ -1207,8 +1389,38 @@ router bgp 65101
       router-id 192.168.255.4
       neighbor 10.255.251.0 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
-!
 ```
+
+## Router BFD
+
+### Router BFD Multihop Summary
+
+| Interval | Minimum RX | Multiplier |
+| -------- | ---------- | ---------- |
+| 1200 | 1200 | 3 |
+
+### Router BFD Multihop Device Configuration
+
+```eos
+!
+router bfd
+   multihop interval 1200 min-rx 1200 multiplier 3
+```
+
+# Multicast
+
+## IP IGMP Snooping
+
+### IP IGMP Snooping Summary
+
+IGMP snooping is globally enabled.
+
+
+### IP IGMP Snooping Device Configuration
+
+```eos
+```
+
 
 ## Router Multicast
 
@@ -1218,14 +1430,175 @@ Routing multicast not defined
 
 Router PIM sparse mode not defined
 
-## VM Tracer Sessions
+# Filters
 
-No VM tracer session defined
+## Community-lists
 
-## Management Security
+Community-lists not defined
 
-Management Security not defined
+## Peer Filters
 
-## Platform
+No peer filters defined
 
-No Platform parameters defined
+## Prefix-lists
+
+### Prefix-lists Summary
+
+#### PL-LOOPBACKS-EVPN-OVERLAY
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 192.168.255.0/24 eq 32 |
+| 20 | permit 192.168.254.0/24 eq 32 |
+
+### Prefix-lists Device Configuration
+
+```eos
+!
+ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+   seq 10 permit 192.168.255.0/24 eq 32
+   seq 20 permit 192.168.254.0/24 eq 32
+```
+
+## IPv6 Prefix-lists
+
+IPv6 prefix-lists not defined
+
+## Route-maps
+
+### Route-maps Summary
+
+#### RM-CONN-2-BGP
+
+| Sequence | Type | Match and/or Set |
+| -------- | ---- | ---------------- |
+| 10 | permit | match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY |
+
+#### RM-MLAG-PEER-IN
+
+| Sequence | Type | Match and/or Set |
+| -------- | ---- | ---------------- |
+| 10 | permit | set origin incomplete |
+
+### Route-maps Device Configuration
+
+```eos
+!
+route-map RM-CONN-2-BGP permit 10
+   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+!
+route-map RM-MLAG-PEER-IN permit 10
+   description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
+   set origin incomplete
+```
+
+## IP Extended Communities
+
+No extended community defined
+
+# ACL
+
+## Standard Access-lists
+
+Standard access-lists not defined
+
+## Extended Access-lists
+
+Extended access-lists not defined
+
+## IPv6 Standard Access-lists
+
+IPv6 standard access-lists not defined
+
+## IPv6 Extended Access-lists
+
+IPv6 extended access-lists not defined
+
+# VRF Instances
+
+## VRF Instances Summary
+
+| VRF Name | IP Routing |
+| -------- | ---------- |
+| MGMT | disabled |
+| Tenant_A_APP_Zone | enabled |
+| Tenant_A_DB_Zone | enabled |
+| Tenant_A_OP_Zone | enabled |
+| Tenant_A_WAN_Zone | enabled |
+| Tenant_A_WEB_Zone | enabled |
+| Tenant_B_OP_Zone | enabled |
+| Tenant_B_WAN_Zone | enabled |
+| Tenant_C_OP_Zone | enabled |
+| Tenant_C_WAN_Zone | enabled |
+
+## VRF Instances Device Configuration
+
+```eos
+!
+vrf instance MGMT
+!
+vrf instance Tenant_A_APP_Zone
+!
+vrf instance Tenant_A_DB_Zone
+!
+vrf instance Tenant_A_OP_Zone
+!
+vrf instance Tenant_A_WAN_Zone
+!
+vrf instance Tenant_A_WEB_Zone
+!
+vrf instance Tenant_B_OP_Zone
+!
+vrf instance Tenant_B_WAN_Zone
+!
+vrf instance Tenant_C_OP_Zone
+!
+vrf instance Tenant_C_WAN_Zone
+```
+
+# Virtual Source NAT
+
+## Virtual Source NAT Summary
+
+| Source NAT VRF | Source NAT IP Address |
+| -------------- | --------------------- |
+| Tenant_A_OP_Zone | 10.255.1.4 |
+
+## Virtual Source NAT Configuration
+
+```eos
+!
+ip address virtual source-nat vrf Tenant_A_OP_Zone address 10.255.1.4
+```
+
+# Platform
+
+No platform parameters defined
+
+# Router L2 VPN
+
+Router L2 VPN not defined
+
+# IP DHCP Relay
+
+IP DHCP relay not defined
+
+# Errdisable
+
+Errdisable is not defined.
+
+# MACsec
+
+MACsec not defined
+
+# QOS
+
+QOS is not defined.
+
+# QOS Profiles
+
+QOS Profiles are not defined
+
+# Custom Templates
+
+No custom templates defined

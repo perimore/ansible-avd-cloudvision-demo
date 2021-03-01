@@ -1,4 +1,4 @@
-# DC1-L2LEAF2A
+# DC1-SPINE02
 
 # Table of Contents
 
@@ -88,7 +88,7 @@
 
 | Management Interface | description | VRF | IP Address | Gateway |
 | -------------------- | ----------- | --- | ---------- | ------- |
-| Management1 | oob_management | MGMT | 10.73.3.12/16 | 10.73.0.1 |
+| Management1 | oob_management | MGMT | 10.73.3.2/16 | 10.73.0.1 |
 
 #### IPv6
 
@@ -104,7 +104,7 @@ interface Management1
    description oob_management
    no shutdown
    vrf MGMT
-   ip address 10.73.3.12/16
+   ip address 10.73.3.2/16
 ```
 
 ## DNS Domain
@@ -352,13 +352,7 @@ MLAG not defined
 
 ## Spanning Tree Summary
 
-STP mode: **mstp**
-
-### MSTP Instance and Priority
-
-| Instance(s) | Priority |
-| -------- | -------- |
-| 0 | 16384 |
+STP mode: **none**
 
 ### Global Spanning-Tree Settings
 
@@ -367,8 +361,7 @@ STP mode: **mstp**
 
 ```eos
 !
-spanning-tree mode mstp
-spanning-tree mst 0 priority 16384
+spanning-tree mode none
 ```
 
 # Internal VLAN Allocation Policy
@@ -388,43 +381,7 @@ vlan internal order ascending range 1006 1199
 
 # VLANs
 
-## VLANs Summary
-
-| VLAN ID | Name | Trunk Groups |
-| ------- | ---- | ------------ |
-| 110 | Tenant_A_OP_Zone_1 | none  |
-| 111 | Tenant_A_OP_Zone_2 | none  |
-| 112 | Tenant_A_OP_Zone_3 | none  |
-| 120 | Tenant_A_WEB_Zone_1 | none  |
-| 121 | Tenant_A_WEBZone_2 | none  |
-| 130 | Tenant_A_APP_Zone_1 | none  |
-| 131 | Tenant_A_APP_Zone_2 | none  |
-
-## VLANs Device Configuration
-
-```eos
-!
-vlan 110
-   name Tenant_A_OP_Zone_1
-!
-vlan 111
-   name Tenant_A_OP_Zone_2
-!
-vlan 112
-   name Tenant_A_OP_Zone_3
-!
-vlan 120
-   name Tenant_A_WEB_Zone_1
-!
-vlan 121
-   name Tenant_A_WEBZone_2
-!
-vlan 130
-   name Tenant_A_APP_Zone_1
-!
-vlan 131
-   name Tenant_A_APP_Zone_2
-```
+No VLANs defined
 
 # Interfaces
 
@@ -440,59 +397,113 @@ No Interface Defaults defined
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | DC1-LEAF2A_Ethernet5 | *trunk | *110-112,120-121,130-131 | *- | *- | 1 |
-| Ethernet2 | DC1-LEAF2B_Ethernet5 | *trunk | *110-112,120-121,130-131 | *- | *- | 1 |
-| Ethernet5 |  server02_Eth1 | trunk | 110-111 | - | - | - |
 
 *Inherited from Port-Channel Interface
+
+#### IPv4
+
+| Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
+| --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
+| Ethernet1 |  P2P_LINK_TO_DC1-LEAF1A_Ethernet2  |  routed  | - |  172.31.255.2/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet2 |  P2P_LINK_TO_DC1-LEAF1B_Ethernet2  |  routed  | - |  172.31.255.6/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet3 |  P2P_LINK_TO_DC1-LEAF2A_Ethernet2  |  routed  | - |  172.31.255.10/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet4 |  P2P_LINK_TO_DC1-LEAF2B_Ethernet2  |  routed  | - |  172.31.255.14/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet5 |  P2P_LINK_TO_DC1-LEAF3A_Ethernet2  |  routed  | - |  172.31.255.18/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet6 |  P2P_LINK_TO_DC1-BLEAF1A_Ethernet2  |  routed  | - |  172.31.255.26/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet7 |  P2P_LINK_TO_DC1-BLEAF1B_Ethernet2  |  routed  | - |  172.31.255.30/31  |  default  |  1500  |  false  |  -  |  -  |
+| Ethernet8 |  P2P_LINK_TO_DC1-LEAF4A_Ethernet2  |  routed  | - |  172.31.255.22/31  |  default  |  1500  |  false  |  -  |  -  |
 
 ### Ethernet Interfaces Device Configuration
 
 ```eos
 !
 interface Ethernet1
-   description DC1-LEAF2A_Ethernet5
+   description P2P_LINK_TO_DC1-LEAF1A_Ethernet2
    no shutdown
-   channel-group 1 mode active
+   mtu 1500
+   no switchport
+   ip address 172.31.255.2/31
 !
 interface Ethernet2
-   description DC1-LEAF2B_Ethernet5
+   description P2P_LINK_TO_DC1-LEAF1B_Ethernet2
    no shutdown
-   channel-group 1 mode active
+   mtu 1500
+   no switchport
+   ip address 172.31.255.6/31
+!
+interface Ethernet3
+   description P2P_LINK_TO_DC1-LEAF2A_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.10/31
+!
+interface Ethernet4
+   description P2P_LINK_TO_DC1-LEAF2B_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.14/31
 !
 interface Ethernet5
-   description server02_Eth1
+   description P2P_LINK_TO_DC1-LEAF3A_Ethernet2
    no shutdown
-   switchport
-   switchport trunk allowed vlan 110-111
-   switchport mode trunk
+   mtu 1500
+   no switchport
+   ip address 172.31.255.18/31
+!
+interface Ethernet6
+   description P2P_LINK_TO_DC1-BLEAF1A_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.26/31
+!
+interface Ethernet7
+   description P2P_LINK_TO_DC1-BLEAF1B_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.30/31
+!
+interface Ethernet8
+   description P2P_LINK_TO_DC1-LEAF4A_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 172.31.255.22/31
 ```
 
 ## Port-Channel Interfaces
 
-### Port-Channel Interfaces Summary
-
-#### L2
-
-| Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
-| --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | DC1-LEAF2A_Po5 | switched | trunk | 110-112,120-121,130-131 | - | - | - | - | - | - |
-
-### Port-Channel Interfaces Device Configuration
-
-```eos
-!
-interface Port-Channel1
-   description DC1-LEAF2A_Po5
-   no shutdown
-   switchport
-   switchport trunk allowed vlan 110-112,120-121,130-131
-   switchport mode trunk
-```
+No port-channels defined
 
 ## Loopback Interfaces
 
-No loopback interfaces defined
+### Loopback Interfaces Summary
+
+#### IPv4
+
+| Interface | Description | VRF | IP Address |
+| --------- | ----------- | --- | ---------- |
+| Loopback0 | EVPN_Overlay_Peering | default | 192.168.255.2/32 |
+
+#### IPv6
+
+| Interface | Description | VRF | IPv6 Address |
+| --------- | ----------- | --- | ------------ |
+| Loopback0 | EVPN_Overlay_Peering | default | - |
+
+
+### Loopback Interfaces Device Configuration
+
+```eos
+!
+interface Loopback0
+   description EVPN_Overlay_Peering
+   no shutdown
+   ip address 192.168.255.2/32
+```
 
 ## VLAN Interfaces
 
@@ -566,7 +577,141 @@ Router ISIS not defined
 
 ## Router BGP
 
-Router BGP not defined
+### Router BGP Summary
+
+| BGP AS | Router ID |
+| ------ | --------- |
+| 65001|  192.168.255.2 |
+
+| BGP Tuning |
+| ---------- |
+| no bgp default ipv4-unicast |
+| distance bgp 20 200 200 |
+| graceful-restart restart-time 300 |
+| graceful-restart |
+| maximum-paths 4 ecmp 4 |
+
+### Router BGP Peer Groups
+
+#### EVPN-OVERLAY-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Address Family | evpn |
+| Next-hop unchanged | True |
+| Source | Loopback0 |
+| Bfd | true |
+| Ebgp multihop | 3 |
+| Send community | true |
+| Maximum routes | 0 (no limit) |
+
+#### IPv4-UNDERLAY-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Address Family | ipv4 |
+| Send community | true |
+| Maximum routes | 12000 |
+
+### BGP Neighbors
+
+| Neighbor | Remote AS | VRF |
+| -------- | --------- | --- |
+| 172.31.255.3 | 65101 | default |
+| 172.31.255.7 | 65101 | default |
+| 172.31.255.11 | 65102 | default |
+| 172.31.255.15 | 65102 | default |
+| 172.31.255.19 | 65103 | default |
+| 172.31.255.23 | 65104 | default |
+| 172.31.255.27 | 65199 | default |
+| 172.31.255.31 | 65199 | default |
+| 192.168.255.3 | 65101 | default |
+| 192.168.255.4 | 65101 | default |
+| 192.168.255.5 | 65102 | default |
+| 192.168.255.6 | 65102 | default |
+| 192.168.255.7 | 65103 | default |
+| 192.168.255.8 | 65104 | default |
+| 192.168.255.9 | 65199 | default |
+| 192.168.255.10 | 65199 | default |
+
+### Router BGP EVPN Address Family
+
+#### Router BGP EVPN MAC-VRFs
+
+#### Router BGP EVPN VRFs
+
+### Router BGP Device Configuration
+
+```eos
+!
+router bgp 65001
+   router-id 192.168.255.2
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   graceful-restart restart-time 300
+   graceful-restart
+   maximum-paths 4 ecmp 4
+   neighbor EVPN-OVERLAY-PEERS peer group
+   neighbor EVPN-OVERLAY-PEERS next-hop-unchanged
+   neighbor EVPN-OVERLAY-PEERS update-source Loopback0
+   neighbor EVPN-OVERLAY-PEERS bfd
+   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
+   neighbor EVPN-OVERLAY-PEERS password 7 q+VNViP5i4rVjW1cxFv2wA==
+   neighbor EVPN-OVERLAY-PEERS send-community
+   neighbor EVPN-OVERLAY-PEERS maximum-routes 0
+   neighbor IPv4-UNDERLAY-PEERS peer group
+   neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
+   neighbor IPv4-UNDERLAY-PEERS send-community
+   neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
+   neighbor 172.31.255.3 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.3 remote-as 65101
+   neighbor 172.31.255.7 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.7 remote-as 65101
+   neighbor 172.31.255.11 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.11 remote-as 65102
+   neighbor 172.31.255.15 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.15 remote-as 65102
+   neighbor 172.31.255.19 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.19 remote-as 65103
+   neighbor 172.31.255.23 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.23 remote-as 65104
+   neighbor 172.31.255.27 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.27 remote-as 65199
+   neighbor 172.31.255.31 peer group IPv4-UNDERLAY-PEERS
+   neighbor 172.31.255.31 remote-as 65199
+   neighbor 192.168.255.3 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.3 remote-as 65101
+   neighbor 192.168.255.3 description DC1-LEAF1A
+   neighbor 192.168.255.4 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.4 remote-as 65101
+   neighbor 192.168.255.4 description DC1-LEAF1B
+   neighbor 192.168.255.5 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.5 remote-as 65102
+   neighbor 192.168.255.5 description DC1-LEAF2A
+   neighbor 192.168.255.6 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.6 remote-as 65102
+   neighbor 192.168.255.6 description DC1-LEAF2B
+   neighbor 192.168.255.7 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.7 remote-as 65103
+   neighbor 192.168.255.7 description DC1-LEAF3A
+   neighbor 192.168.255.8 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.8 remote-as 65104
+   neighbor 192.168.255.8 description DC1-LEAF4A
+   neighbor 192.168.255.9 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.9 remote-as 65199
+   neighbor 192.168.255.9 description DC1-BLEAF1A
+   neighbor 192.168.255.10 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.10 remote-as 65199
+   neighbor 192.168.255.10 description DC1-BLEAF1B
+   redistribute connected route-map RM-CONN-2-BGP
+   !
+   address-family evpn
+      neighbor EVPN-OVERLAY-PEERS activate
+   !
+   address-family ipv4
+      no neighbor EVPN-OVERLAY-PEERS activate
+      neighbor IPv4-UNDERLAY-PEERS activate
+```
 
 ## Router BFD
 
@@ -588,16 +733,7 @@ router bfd
 
 ## IP IGMP Snooping
 
-### IP IGMP Snooping Summary
-
-IGMP snooping is globally enabled.
-
-
-### IP IGMP Snooping Device Configuration
-
-```eos
-```
-
+No IP IGMP configuration
 
 ## Router Multicast
 
@@ -619,7 +755,21 @@ No peer filters defined
 
 ## Prefix-lists
 
-Prefix-lists not defined
+### Prefix-lists Summary
+
+#### PL-LOOPBACKS-EVPN-OVERLAY
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 192.168.255.0/24 le 32 |
+
+### Prefix-lists Device Configuration
+
+```eos
+!
+ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+   seq 10 permit 192.168.255.0/24 le 32
+```
 
 ## IPv6 Prefix-lists
 
@@ -627,7 +777,21 @@ IPv6 prefix-lists not defined
 
 ## Route-maps
 
-No route-maps defined
+### Route-maps Summary
+
+#### RM-CONN-2-BGP
+
+| Sequence | Type | Match and/or Set |
+| -------- | ---- | ---------------- |
+| 10 | permit | match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY |
+
+### Route-maps Device Configuration
+
+```eos
+!
+route-map RM-CONN-2-BGP permit 10
+   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+```
 
 ## IP Extended Communities
 
