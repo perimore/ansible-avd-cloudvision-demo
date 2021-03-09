@@ -394,7 +394,7 @@ vlan internal order ascending range 1006 1199
 | ------- | ---- | ------------ |
 | 110 | Tenant_A_OP_Zone_1 | none  |
 | 111 | Tenant_A_OP_Zone_2 | none  |
-| 112 | Tenant_A_OP_Zone_3 | none  |
+| 114 | Tenant_A_OP_Zone_4 | none  |
 | 120 | Tenant_A_WEB_Zone_1 | none  |
 | 121 | Tenant_A_WEBZone_2 | none  |
 | 130 | Tenant_A_APP_Zone_1 | none  |
@@ -410,8 +410,8 @@ vlan 110
 vlan 111
    name Tenant_A_OP_Zone_2
 !
-vlan 112
-   name Tenant_A_OP_Zone_3
+vlan 114
+   name Tenant_A_OP_Zone_4
 !
 vlan 120
    name Tenant_A_WEB_Zone_1
@@ -440,9 +440,9 @@ No Interface Defaults defined
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | DC1-LEAF1A_Ethernet5 | *trunk | *110-112,120-121,130-131 | *- | *- | 1 |
-| Ethernet2 | DC1-LEAF1B_Ethernet5 | *trunk | *110-112,120-121,130-131 | *- | *- | 1 |
-| Ethernet5 |  server01_Eth1 | trunk | 110-111 | - | - | - |
+| Ethernet1 | DC1-LEAF1A_Ethernet5 | *trunk | *110-111,114,120-121,130-131 | *- | *- | 1 |
+| Ethernet2 | DC1-LEAF1B_Ethernet5 | *trunk | *110-111,114,120-121,130-131 | *- | *- | 1 |
+| Ethernet5 |  server01_Eth1 | trunk | 110-111,114 | - | - | - |
 
 *Inherited from Port-Channel Interface
 
@@ -464,8 +464,9 @@ interface Ethernet5
    description server01_Eth1
    no shutdown
    switchport
-   switchport trunk allowed vlan 110-111
+   switchport trunk allowed vlan 110-111,114
    switchport mode trunk
+   spanning-tree portfast
 ```
 
 ## Port-Channel Interfaces
@@ -476,7 +477,7 @@ interface Ethernet5
 
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | DC1-LEAF1A_Po5 | switched | trunk | 110-112,120-121,130-131 | - | - | - | - | - | - |
+| Port-Channel1 | DC1-LEAF1A_Po5 | switched | trunk | 110-111,114,120-121,130-131 | - | - | - | - | - | - |
 
 ### Port-Channel Interfaces Device Configuration
 
@@ -486,7 +487,7 @@ interface Port-Channel1
    description DC1-LEAF1A_Po5
    no shutdown
    switchport
-   switchport trunk allowed vlan 110-112,120-121,130-131
+   switchport trunk allowed vlan 110-111,114,120-121,130-131
    switchport mode trunk
 ```
 

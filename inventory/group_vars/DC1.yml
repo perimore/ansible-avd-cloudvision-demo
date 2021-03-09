@@ -59,3 +59,25 @@ custom_structured_configuration_aliases: |
   alias sps show port-channel summary
   alias sqnz show interface counter queue | nz
   alias srnz show interface counter rate | nz
+
+# custom_structured_configuration_snmp_server:
+#   contact: "Sean"
+#   location: "Somewhere in London town"
+#   hosts:
+#     - host: 10.73.0.1
+#       vrf: "MGMT"
+#       users:
+#         - username: admin
+#           authentication_level: noauth
+#           version: 2c
+#   traps:
+#     enable: true
+#   vrfs:
+#     - name: MGMT
+#       enable: true
+#   users:
+#     - name: admin
+#       group: none
+#       version: 2c
+#       auth: < hash_algorithm >
+#       auth_passphrase: < encrypted_auth_passphrase >

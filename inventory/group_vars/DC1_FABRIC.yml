@@ -36,6 +36,8 @@ bgp_peer_groups:
   MLAG_IPv4_UNDERLAY_PEER:
     password: "vnEaG8gMeQf3d3cN6PktXQ=="
 
+evpn_prevent_readvertise_to_server: true
+
 # Spine Switches
 spine:
   platform: vEOS-LAB

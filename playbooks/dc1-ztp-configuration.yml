@@ -6,3 +6,7 @@
   - name: 'Execute ZTP configuration role'
     import_role:
       name: arista.cvp.dhcp_configuration
+  - name: Reload service expose-eos.service, in all cases
+    ansible.builtin.service:
+      name: expose-eos.service
+      state: reloaded

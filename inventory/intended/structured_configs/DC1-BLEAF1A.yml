@@ -31,7 +31,7 @@ leaf_allowed_svis:
 - 141
 - 110
 - 111
-- 112
+- 114
 - 150
 - 120
 - 121
@@ -48,7 +48,7 @@ leaf_allowed_vlans:
 - 141
 - 110
 - 111
-- 112
+- 114
 - 150
 - 120
 - 121
@@ -164,9 +164,9 @@ vlans:
   111:
     tenant: Tenant_A
     name: Tenant_A_OP_Zone_2
-  112:
+  114:
     tenant: Tenant_A
-    name: Tenant_A_OP_Zone_3
+    name: Tenant_A_OP_Zone_4
   3009:
     tenant: Tenant_A
     name: MLAG_iBGP_Tenant_A_OP_Zone
@@ -383,7 +383,7 @@ vlan_interfaces:
     description: Tenant_A_DB_BZone_1
     shutdown: false
     vrf: Tenant_A_DB_Zone
-    ip_address_virtual: 10.1.40.1/24
+    ip_address_virtual: 10.1.40.254/24
   Vlan141:
     tenant: Tenant_A
     tags:
@@ -391,7 +391,7 @@ vlan_interfaces:
     description: Tenant_A_DB_Zone_2
     shutdown: false
     vrf: Tenant_A_DB_Zone
-    ip_address_virtual: 10.1.41.1/24
+    ip_address_virtual: 10.1.41.254/24
   Vlan3012:
     tenant: Tenant_A
     type: underlay_peering
@@ -407,7 +407,7 @@ vlan_interfaces:
     description: Tenant_A_OP_Zone_1
     shutdown: false
     vrf: Tenant_A_OP_Zone
-    ip_address_virtual: 10.1.10.1/24
+    ip_address_virtual: 10.1.10.254/24
   Vlan111:
     tenant: Tenant_A
     tags:
@@ -415,15 +415,15 @@ vlan_interfaces:
     description: Tenant_A_OP_Zone_2
     shutdown: false
     vrf: Tenant_A_OP_Zone
-    ip_address_virtual: 10.1.11.1/24
-  Vlan112:
+    ip_address_virtual: 10.1.11.254/24
+  Vlan114:
     tenant: Tenant_A
     tags:
     - opzone
-    description: Tenant_A_OP_Zone_3
+    description: Tenant_A_OP_Zone_4
     shutdown: false
     vrf: Tenant_A_OP_Zone
-    ip_address_virtual: 10.1.12.254/24
+    ip_address_virtual: 10.1.14.254/24
   Vlan3009:
     tenant: Tenant_A
     type: underlay_peering
@@ -439,7 +439,7 @@ vlan_interfaces:
     description: Tenant_A_WAN_Zone_1
     shutdown: false
     vrf: Tenant_A_WAN_Zone
-    ip_address_virtual: 10.1.40.1/24
+    ip_address_virtual: 10.1.40.254/24
   Vlan3013:
     tenant: Tenant_A
     type: underlay_peering
@@ -463,7 +463,7 @@ vlan_interfaces:
     description: Tenant_A_WEBZone_2
     shutdown: false
     vrf: Tenant_A_WEB_Zone
-    ip_address_virtual: 10.1.21.1/24
+    ip_address_virtual: 10.1.21.254/24
   Vlan3010:
     tenant: Tenant_A
     type: underlay_peering
@@ -486,7 +486,7 @@ vlan_interfaces:
     description: Tenant_B_OP_Zone_2
     shutdown: false
     vrf: Tenant_B_OP_Zone
-    ip_address_virtual: 10.2.11.1/24
+    ip_address_virtual: 10.2.11.254/24
   Vlan3019:
     tenant: Tenant_B
     type: underlay_peering
@@ -502,7 +502,7 @@ vlan_interfaces:
     description: Tenant_B_WAN_Zone_1
     shutdown: false
     vrf: Tenant_B_WAN_Zone
-    ip_address_virtual: 10.2.50.1/24
+    ip_address_virtual: 10.2.50.254/24
   Vlan3020:
     tenant: Tenant_B
     type: underlay_peering
@@ -518,6 +518,7 @@ vlan_interfaces:
     description: Tenant_C_OP_Zone_1
     shutdown: false
     vrf: Tenant_C_OP_Zone
+    ip_address_virtual: 10.3.10.254/24
   Vlan311:
     tenant: Tenant_C
     tags:
@@ -525,6 +526,7 @@ vlan_interfaces:
     description: Tenant_C_OP_Zone_2
     shutdown: false
     vrf: Tenant_C_OP_Zone
+    ip_address_virtual: 10.3.11.254/24
   Vlan3029:
     tenant: Tenant_C
     type: underlay_peering
@@ -540,6 +542,7 @@ vlan_interfaces:
     description: Tenant_C_WAN_Zone_1
     shutdown: false
     vrf: Tenant_C_WAN_Zone
+    ip_address_virtual: 10.3.50.254/24
   Vlan3030:
     tenant: Tenant_C
     type: underlay_peering
@@ -569,8 +572,8 @@ vxlan_tunnel_interface:
           vni: 10110
         111:
           vni: 50111
-        112:
-          vni: 50112
+        114:
+          vni: 50114
         150:
           vni: 10150
         120:
@@ -742,7 +745,7 @@ router_bgp:
         - '10:10'
       redistribute_routes:
       - learned
-      vlan: 110-112
+      vlan: 110-111,114
     Tenant_A_WAN_Zone:
       rd: 192.168.255.9:14
       route_targets:

@@ -53,3 +53,12 @@ ztp:
     - name: DC1-L2LEAF2A
       mac: '0c:1d:c0:1d:62:23'
       ip4: 10.73.3.12
+    - name: POD01-SRV
+      mac: '50:8d:00:0b:0f:00'
+      ip4: 10.73.3.21
+    - name: POD02-SRV
+      mac: '50:8d:00:0c:0f:00'
+      ip4: 10.73.3.22
+    - name: POD-ESI
+      mac: '50:8d:00:12:0f:00'
+      ip4: 10.73.3.23
