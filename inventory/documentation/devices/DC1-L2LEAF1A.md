@@ -114,7 +114,6 @@ interface Management1
 ### DNS Domain Device Configuration
 
 ```eos
-!
 dns domain lon.aristanetworks.com
 !
 ```
@@ -192,7 +191,6 @@ Management API gnmi is not defined
 ```eos
 !
 management api http-commands
-   protocol https
    no shutdown
    !
    vrf MGMT
@@ -270,7 +268,6 @@ Authorization for configuration commands is disabled.
 ### AAA Authorization Device Configuration
 
 ```eos
-!
 aaa authorization exec default local
 !
 ```

@@ -114,7 +114,6 @@ interface Management1
 ### DNS Domain Device Configuration
 
 ```eos
-!
 dns domain lon.aristanetworks.com
 !
 ```
@@ -192,7 +191,6 @@ Management API gnmi is not defined
 ```eos
 !
 management api http-commands
-   protocol https
    no shutdown
    !
    vrf MGMT
@@ -270,7 +268,6 @@ Authorization for configuration commands is disabled.
 ### AAA Authorization Device Configuration
 
 ```eos
-!
 aaa authorization exec default local
 !
 ```
@@ -420,56 +417,48 @@ No Interface Defaults defined
 interface Ethernet1
    description P2P_LINK_TO_DC1-LEAF1A_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.2/31
 !
 interface Ethernet2
    description P2P_LINK_TO_DC1-LEAF1B_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.6/31
 !
 interface Ethernet3
    description P2P_LINK_TO_DC1-LEAF2A_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.10/31
 !
 interface Ethernet4
    description P2P_LINK_TO_DC1-LEAF2B_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.14/31
 !
 interface Ethernet5
    description P2P_LINK_TO_DC1-LEAF3A_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.18/31
 !
 interface Ethernet6
    description P2P_LINK_TO_DC1-BLEAF1A_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.26/31
 !
 interface Ethernet7
    description P2P_LINK_TO_DC1-BLEAF1B_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.30/31
 !
 interface Ethernet8
    description P2P_LINK_TO_DC1-LEAF4A_Ethernet2
    no shutdown
-   mtu 1500
    no switchport
    ip address 172.31.255.22/31
 ```

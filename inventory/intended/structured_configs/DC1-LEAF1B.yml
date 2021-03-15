@@ -20,7 +20,6 @@ leaf_allowed_vrfs:
 - Tenant_A_OP_Zone
 - Tenant_A_WAN_Zone
 - Tenant_A_WEB_Zone
-- Tenant_B_OP_Zone
 - Tenant_B_WAN_Zone
 - Tenant_C_OP_Zone
 - Tenant_C_WAN_Zone
@@ -35,8 +34,6 @@ leaf_allowed_svis:
 - 150
 - 120
 - 121
-- 210
-- 211
 - 250
 - 310
 - 311
@@ -54,8 +51,6 @@ leaf_allowed_vlans:
 - 121
 - 160
 - 161
-- 210
-- 211
 - 250
 - 310
 - 311
@@ -197,17 +192,6 @@ vlans:
   161:
     tenant: Tenant_A
     name: Tenant_A_NFS
-  210:
-    tenant: Tenant_B
-    name: Tenant_B_OP_Zone_1
-  211:
-    tenant: Tenant_B
-    name: Tenant_B_OP_Zone_2
-  3019:
-    tenant: Tenant_B
-    name: MLAG_iBGP_Tenant_B_OP_Zone
-    trunk_groups:
-    - LEAF_PEER_L3
   250:
     tenant: Tenant_B
     name: Tenant_B_WAN_Zone_1
@@ -252,9 +236,6 @@ vrfs:
     ip_routing: true
   Tenant_A_WEB_Zone:
     tenant: Tenant_A
-    ip_routing: true
-  Tenant_B_OP_Zone:
-    tenant: Tenant_B
     ip_routing: true
   Tenant_B_WAN_Zone:
     tenant: Tenant_B
@@ -489,29 +470,6 @@ vlan_interfaces:
     vrf: Tenant_A_WEB_Zone
     ip_address: 10.255.251.1/31
     mtu: 1500
-  Vlan210:
-    tenant: Tenant_B
-    tags:
-    - opzone
-    description: Tenant_B_OP_Zone_1
-    shutdown: false
-    vrf: Tenant_B_OP_Zone
-  Vlan211:
-    tenant: Tenant_B
-    tags:
-    - opzone
-    description: Tenant_B_OP_Zone_2
-    shutdown: false
-    vrf: Tenant_B_OP_Zone
-    ip_address_virtual: 10.2.11.254/24
-  Vlan3019:
-    tenant: Tenant_B
-    type: underlay_peering
-    shutdown: false
-    description: 'MLAG_PEER_L3_iBGP: vrf Tenant_B_OP_Zone'
-    vrf: Tenant_B_OP_Zone
-    ip_address: 10.255.251.1/31
-    mtu: 1500
   Vlan250:
     tenant: Tenant_B
     tags:
@@ -601,10 +559,6 @@ vxlan_tunnel_interface:
           vni: 55160
         161:
           vni: 10161
-        210:
-          vni: 20210
-        211:
-          vni: 20211
         250:
           vni: 20250
         310:
@@ -624,8 +578,6 @@ vxlan_tunnel_interface:
           vni: 14
         Tenant_A_WEB_Zone:
           vni: 11
-        Tenant_B_OP_Zone:
-          vni: 20
         Tenant_B_WAN_Zone:
           vni: 21
         Tenant_C_OP_Zone:
@@ -675,6 +627,14 @@ route_maps:
         - origin incomplete
         description: Make routes learned over MLAG Peer-link less preferred on spines
           to ensure optimal routing
+  RM-EVPN-FILTER-AS65001:
+    sequence_numbers:
+      10:
+        type: deny
+        match:
+        - as 65001
+      20:
+        type: permit
 router_bgp:
   as: 65101
   router_id: 192.168.255.4
@@ -718,10 +678,12 @@ router_bgp:
       peer_group: EVPN-OVERLAY-PEERS
       description: DC1-SPINE01
       remote_as: 65001
+      route_map_out: RM-EVPN-FILTER-AS65001
     192.168.255.2:
       peer_group: EVPN-OVERLAY-PEERS
       description: DC1-SPINE02
       remote_as: 65001
+      route_map_out: RM-EVPN-FILTER-AS65001
   redistribute_routes:
     connected:
       route_map: RM-CONN-2-BGP
@@ -797,14 +759,6 @@ router_bgp:
       redistribute_routes:
       - learned
       vlan: 161
-    Tenant_B_OP_Zone:
-      rd: 192.168.255.4:20
-      route_targets:
-        both:
-        - '20:20'
-      redistribute_routes:
-      - learned
-      vlan: 210-211
     Tenant_B_WAN_Zone:
       rd: 192.168.255.4:21
       route_targets:
@@ -901,21 +855,6 @@ router_bgp:
         export:
           evpn:
           - '11:11'
-      neighbors:
-        10.255.251.0:
-          peer_group: MLAG-IPv4-UNDERLAY-PEER
-      redistribute_routes:
-      - connected
-    Tenant_B_OP_Zone:
-      router_id: 192.168.255.4
-      rd: 192.168.255.4:20
-      route_targets:
-        import:
-          evpn:
-          - '20:20'
-        export:
-          evpn:
-          - '20:20'
       neighbors:
         10.255.251.0:
           peer_group: MLAG-IPv4-UNDERLAY-PEER

@@ -1,28 +1,16 @@
 ---
 CVP_DEVICES:
-  DC1-BLEAF1A:
-    name: DC1-BLEAF1A
-    parentContainerName: DC1_BLEAF1
+  DC1-SPINE01:
+    name: DC1-SPINE01
+    parentContainerName: DC1_SPINES
     configlets:
-      - DC1-AVD_DC1-BLEAF1A
+      - DC1-AVD_DC1-SPINE01
     imageBundle: []
-  DC1-BLEAF1B:
-    name: DC1-BLEAF1B
-    parentContainerName: DC1_BLEAF1
+  DC1-SPINE02:
+    name: DC1-SPINE02
+    parentContainerName: DC1_SPINES
     configlets:
-      - DC1-AVD_DC1-BLEAF1B
-    imageBundle: []
-  DC1-L2LEAF1A:
-    name: DC1-L2LEAF1A
-    parentContainerName: DC1_L2LEAF1
-    configlets:
-      - DC1-AVD_DC1-L2LEAF1A
-    imageBundle: []
-  DC1-L2LEAF2A:
-    name: DC1-L2LEAF2A
-    parentContainerName: DC1_L2LEAF2
-    configlets:
-      - DC1-AVD_DC1-L2LEAF2A
+      - DC1-AVD_DC1-SPINE02
     imageBundle: []
   DC1-LEAF1A:
     name: DC1-LEAF1A
@@ -60,31 +48,43 @@ CVP_DEVICES:
     configlets:
       - DC1-AVD_DC1-LEAF4A
     imageBundle: []
-  DC1-SPINE01:
-    name: DC1-SPINE01
-    parentContainerName: DC1_SPINES
+  DC1-BLEAF1A:
+    name: DC1-BLEAF1A
+    parentContainerName: DC1_BLEAF1
     configlets:
-      - DC1-AVD_DC1-SPINE01
+      - DC1-AVD_DC1-BLEAF1A
     imageBundle: []
-  DC1-SPINE02:
-    name: DC1-SPINE02
-    parentContainerName: DC1_SPINES
+  DC1-BLEAF1B:
+    name: DC1-BLEAF1B
+    parentContainerName: DC1_BLEAF1
     configlets:
-      - DC1-AVD_DC1-SPINE02
+      - DC1-AVD_DC1-BLEAF1B
+    imageBundle: []
+  DC1-L2LEAF1A:
+    name: DC1-L2LEAF1A
+    parentContainerName: DC1_L2LEAF1
+    configlets:
+      - DC1-AVD_DC1-L2LEAF1A
+    imageBundle: []
+  DC1-L2LEAF2A:
+    name: DC1-L2LEAF2A
+    parentContainerName: DC1_L2LEAF2
+    configlets:
+      - DC1-AVD_DC1-L2LEAF2A
     imageBundle: []
 CVP_CONTAINERS:
-  DC1_BLEAF1:
-    parent_container: DC1_L3LEAFS
   DC1_FABRIC:
     parent_container: Tenant
+  DC1_L2LEAFS:
+    parent_container: DC1_FABRIC
   DC1_L2LEAF1:
     parent_container: DC1_L2LEAFS
   DC1_L2LEAF2:
     parent_container: DC1_L2LEAFS
-  DC1_L2LEAFS:
-    parent_container: DC1_FABRIC
   DC1_L3LEAFS:
     parent_container: DC1_FABRIC
+  DC1_BLEAF1:
+    parent_container: DC1_L3LEAFS
   DC1_LEAF1:
     parent_container: DC1_L3LEAFS
   DC1_LEAF2:

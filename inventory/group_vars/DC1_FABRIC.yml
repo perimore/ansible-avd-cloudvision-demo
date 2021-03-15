@@ -75,11 +75,15 @@ l3leaf:
         DC1-LEAF1A:
           id: 1
           mgmt_ip: 10.73.3.3/16
+          spines: [DC1-SPINE01]
           spine_interfaces: [Ethernet1, Ethernet1]
+          uplink_to_spine_interfaces: [Ethernet1, Ethernet2]
         DC1-LEAF1B:
           id: 2
           mgmt_ip: 10.73.3.4/16
+          spines: [DC1-SPINE01]
           spine_interfaces: [Ethernet2, Ethernet2]
+          uplink_to_spine_interfaces: [Ethernet1, Ethernet2]
     DC1_LEAF2:
       bgp_as: 65102
       nodes:
